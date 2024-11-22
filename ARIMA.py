@@ -1,4 +1,4 @@
-
+import matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
@@ -6,9 +6,13 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 
 
+STOCK_SYMBOL = "SPY"
+DATA_FILENAME = "weekly_adjusted_SPY.csv"
+
+
 def load_dataset() -> pd.DataFrame:
     # Load the dataset
-    data = pd.read_csv("weekly_adjusted_AAPL.csv")
+    data = pd.read_csv(f"data/{DATA_FILENAME}")
     data = data[['timestamp', 'adjusted close']]
     data['timestamp'] = pd.to_datetime(data['timestamp'])
     data.sort_values('timestamp', inplace=True)
@@ -43,10 +47,19 @@ def main() -> None:
     print(f"Test RMSE: {rmse:.3f}")
 
     # Plot the results
+    plt.title(
+        f'Stock Forecast vs Actual for {STOCK_SYMBOL} - '
+        + pd.Timestamp.now().strftime("%Y-%m-%d")
+    )
     plt.plot(test, label="Actual")
     plt.plot(predictions, label="Predicted", color="red")
     plt.legend()
-    plt.show()
+    # If FigureCanvasAgg is interactive show plot
+    if matplotlib.is_interactive():
+        plt.show()
+    else:
+        plt.savefig(f'output/ARIMA_{STOCK_SYMBOL}_forecast.png')
+
 
 if __name__ == "__main__":
     main()

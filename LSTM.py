@@ -1,3 +1,4 @@
+import matplotlib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -5,9 +6,13 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense
 
 
+STOCK_SYMBOL = "SPY"
+DATA_FILENAME = "weekly_adjusted_SPY.csv"
+
+
 def load_dataset() -> pd.DataFrame:
     # Load the dataset
-    data = pd.read_csv("weekly_adjusted_AAPL.csv")
+    data = pd.read_csv(f"data/{DATA_FILENAME}")
     data = data[['timestamp', 'adjusted close']]
     data['timestamp'] = pd.to_datetime(data['timestamp'])
     data.sort_values('timestamp', inplace=True)
@@ -70,10 +75,18 @@ def main() -> None:
     predictions = model.predict(X_test, verbose=0)
 
     # Plot the results
+    plt.title(
+        f'Stock Forecast vs Actual for {STOCK_SYMBOL} - '
+        + pd.Timestamp.now().strftime("%Y-%m-%d")
+    )
     plt.plot(y_test, label="Actual")
     plt.plot(predictions, label="Predicted", color="red")
     plt.legend()
-    plt.show()
+    # If FigureCanvasAgg is interactive show plot
+    if matplotlib.is_interactive():
+        plt.show()
+    else:
+        plt.savefig(f'output/LSTM_{STOCK_SYMBOL}_forecast.png')
 
 
 if __name__ == "__main__":

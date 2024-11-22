@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -7,9 +8,13 @@ from sklearn.metrics import mean_absolute_error
 from xgboost import XGBRegressor
 
 
+DATA_FILENAME = "weekly_adjusted_SPY.csv"
+STOCK_SYMBOL = "SPY"
+
+
 def load_dataset() -> pd.DataFrame:
     # Load the dataset
-    data = pd.read_csv("weekly_adjusted_AAPL.csv")
+    data = pd.read_csv(f"data/{DATA_FILENAME}")
     data = data[['timestamp', 'adjusted close', 'volume']]
     data['timestamp'] = pd.to_datetime(data['timestamp'])
     data.sort_values('timestamp', inplace=True)
@@ -73,10 +78,18 @@ def main() -> None:
 
     # Evaluate
     y, yhat = walk_forward_validation(supervised, n_test)
+    plt.title(
+        f'Stock Forecast vs Actual for {STOCK_SYMBOL} - '
+        + pd.Timestamp.now().strftime("%Y-%m-%d")
+    )
     plt.plot(y, label='Expected')
     plt.plot(yhat, label='Predicted')
     plt.legend()
-    plt.show()
+    # If FigureCanvasAgg is interactive show plot
+    if matplotlib.is_interactive():
+        plt.show()
+    else:
+        plt.savefig(f'output/XGBoost_{STOCK_SYMBOL}_forecast.png')
 
 
 if __name__ == '__main__':
