@@ -29,7 +29,7 @@ This repository contains three main files for our project:
     ```
 4. Step into virtual environment:
     ```bash
-    python -m venv venv
+    source venv/bin/activate
     ```
 5. Install dependencies:
     ```bash
