@@ -17,13 +17,25 @@ This repository contains three main files for our project:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/cmpe255-team-project.git
+    git clone https://github.com/nhattrinh/cmpe255-team-project.git
     ```
 2. Navigate to the project directory:
     ```bash
     cd cmpe255-team-project
     ```
-3. Run the desired model file:
+3. Create virtual environment:
+    ```bash
+    python -m venv venv
+    ```
+4. Step into virtual environment:
+    ```bash
+    python -m venv venv
+    ```
+5. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+7. Run the desired model file:
     ```bash
     python LSTM.py
     ```
@@ -51,7 +63,3 @@ pip install -r requirements.txt
 - Nhat Trinh
 - Ivy Vo
 - Jinwoo Bae
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
